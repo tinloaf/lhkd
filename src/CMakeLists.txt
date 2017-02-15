@@ -1,1 +1,1 @@
-MACRO_ADD_SOURCES( main.cpp keyboard.cpp )
+MACRO_ADD_SOURCES( main.cpp keyboard.cpp config.cpp )

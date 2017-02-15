@@ -1,0 +1,11 @@
+{
+  "keys": [
+    {"key": "XF86Tools",
+    "meta": false,
+    "alt": false,
+    "ctrl": false,
+    "shift": false,
+    "action": "echo foobar > /tmp/itworks"
+    }
+  ]
+}
