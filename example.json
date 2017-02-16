@@ -5,6 +5,7 @@
     "alt": false,
     "ctrl": false,
     "shift": false,
+    "super": false,
     "action": "echo foobar > /tmp/itworks"
     }
   ]
