@@ -15,10 +15,13 @@ class Keyboard {
 public:
   Keyboard();
 
-  void add_hotkey(std::string keyname, bool meta, bool alt, bool ctrl, bool shift, std::string action);
+  void add_hotkey(std::string keyname, bool meta, bool alt, bool ctrl, bool shift, bool super, std::string action);
   void listen();
 
 private:
+  // wtf? why do i see every event twice?
+  KeySym last_key = XKB_KEY_NoSymbol;
+
   void handle_keypress(KeySym ksym);
   void handle(Display* display, XIRawEvent *ev, bool press);
 
@@ -36,16 +39,19 @@ private:
   static const size_t KC_META_R =  5;
   static const size_t KC_SHIFT_L =  6;
   static const size_t KC_SHIFT_R =  7;
+  static const size_t KC_SUPER_L =  6;
+  static const size_t KC_SUPER_R =  7;
 
   static const size_t MOD_CTRL = 0;
   static const size_t MOD_ALT = 1;
   static const size_t MOD_META = 2;
   static const size_t MOD_SHIFT = 3;
+  static const size_t MOD_SUPER = 4;
 
-  std::array<bool, 8> mod_keys;
-  std::array<bool, 4> mod_state;
+  std::array<bool, 10> mod_keys;
+  std::array<bool, 5> mod_state;
 
-  std::array<std::unordered_map<xkb_keysym_t, std::string>, 16> actions;
+  std::array<std::unordered_map<xkb_keysym_t, std::string>, 32> actions;
 
   size_t mod_profile();
 

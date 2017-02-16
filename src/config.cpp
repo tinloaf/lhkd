@@ -13,6 +13,6 @@ void
 Config::process_keys(Keyboard &kbd)
 {
   for (auto entry : this->data["keys"]) {
-    kbd.add_hotkey(entry["key"], entry["meta"], entry["alt"], entry["ctrl"], entry["shift"], entry["action"]);
+    kbd.add_hotkey(entry["key"], entry["meta"], entry["alt"], entry["ctrl"], entry["shift"], entry["super"], entry["action"]);
   }
 }
