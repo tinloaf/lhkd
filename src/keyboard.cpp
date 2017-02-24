@@ -4,6 +4,7 @@
 #include <string.h>
 #include <iostream>
 #include <cassert>
+#include <xcb/xproto.h>
 
 Keyboard::Keyboard()
 {
@@ -38,6 +39,17 @@ Keyboard::Keyboard()
 }
 
 void
+Keyboard::establish_grab(xkb_keysym_t ksym, bool meta, bool alt, bool ctrl, bool shift, bool super)
+{
+  auto kc = XKeysymToKeycode(this->display, ksym);
+  uint16_t modifiers = this->get_xlib_modifiers(meta,alt,ctrl,shift,super);
+
+  std::cout << "Grabbing key " << ksym << " with modifiers " << modifiers << "\n";
+  XGrabKey(this->display, kc, modifiers, DefaultRootWindow(display), false, GrabModeAsync, GrabModeAsync);
+}
+
+
+void
 Keyboard::add_hotkey(std::string keyname, bool meta, bool alt, bool ctrl, bool shift, bool super, std::string action)
 {
   size_t profile = (meta ? 1 << MOD_META : 0) |
@@ -51,6 +63,8 @@ Keyboard::add_hotkey(std::string keyname, bool meta, bool alt, bool ctrl, bool s
   std::cout << "Adding hotkey: KeySym " << ksym << " Flags " << profile <<  " action: " << action << "\n";
   assert(ksym != XKB_KEY_NoSymbol);
   this->actions[profile].insert(std::make_pair(ksym, action));
+
+  this->establish_grab(ksym, meta, alt, ctrl, shift, super);
 }
 
 void
@@ -59,9 +73,36 @@ Keyboard::handle_keypress(KeySym ksym)
   //std::cout << "handling..." << ksym << " Flags: " << this->mod_profile() << "\n";
   if (actions[this->mod_profile()].find(ksym) != actions[this->mod_profile()].end()) {
     std::cout << "Action: " << actions[this->mod_profile()][ksym] << "\n";
+
+    // Re-grab
+    this->establish_grab(ksym, this->mod_state[MOD_META], this->mod_state[MOD_ALT], this->mod_state[MOD_CTRL], this->mod_state[MOD_SHIFT], this->mod_state[MOD_SUPER]);
+
     auto p = popen(actions[this->mod_profile()][ksym].c_str(), "r");
     pclose(p);
   }
+}
+
+uint16_t
+Keyboard::get_xlib_modifiers(bool meta, bool alt, bool ctrl, bool shift, bool super)
+{
+  uint16_t modifiers;
+  if (alt) {
+    modifiers |= Mod1Mask;
+  }
+  if (meta) {
+    modifiers |= Mod3Mask;
+  }
+  if (super) {
+    modifiers |= Mod4Mask;
+  }
+  if (ctrl) {
+    modifiers |= ControlMask;
+  }
+  if (shift) {
+    modifiers |= ShiftMask;
+  }
+
+  return modifiers;
 }
 
 size_t

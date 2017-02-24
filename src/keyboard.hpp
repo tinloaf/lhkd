@@ -25,6 +25,8 @@ private:
   void handle_keypress(KeySym ksym);
   void handle(Display* display, XIRawEvent *ev, bool press);
 
+  void establish_grab(xkb_keysym_t ksym, bool meta, bool alt, bool ctrl, bool shift, bool super);
+
   int opcode, event, error;
 
   Display* display;
@@ -54,7 +56,7 @@ private:
   std::array<std::unordered_map<xkb_keysym_t, std::string>, 32> actions;
 
   size_t mod_profile();
-
+  uint16_t get_xlib_modifiers(bool meta, bool alt, bool ctrl, bool shift, bool super);
 };
 
 #endif
