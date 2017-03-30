@@ -7,6 +7,14 @@
     "shift": false,
     "super": false,
     "action": "echo foobar > /tmp/itworks"
+    },
+    {"key": "m",
+    "meta": false,
+    "alt": false,
+    "ctrl": false,
+    "shift": false,
+    "super": true,
+    "action": "/usr/bin/xmessage \"Hello World\""
     }
   ]
 }

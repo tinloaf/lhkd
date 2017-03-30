@@ -19,7 +19,8 @@ file(GLOB_RECURSE SRCS "src/*.cpp")
 
 
 # Add compiler flags
-add_definitions(-std=c++11 -Wall) # -g O3 etc are added according to Release / Debug compilation
+set(CMAKE_C_FLAGS "-Wall -Wextra -pedantic -Wfloat-equal -Wundef -Wshadow -Wpointer-arith -Wcast-align -Wstrict-overflow=5 -Wwrite-strings -Wcast-qual -Wswitch-default -Wswitch-enum -Wconversion -Wunreachable-code -fno-inline")
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11")
 
 ADD_EXECUTABLE(
     ${EXECUTABLE_NAME}
