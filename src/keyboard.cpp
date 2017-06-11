@@ -46,7 +46,6 @@ Keyboard::establish_grab(xkb_keysym_t ksym, bool meta, bool alt, bool ctrl, bool
   auto kc = XKeysymToKeycode(this->display, ksym);
   uint16_t modifiers = this->get_xlib_modifiers(meta,alt,ctrl,shift,super);
 
-  std::cout << "Grabbing key " << ksym << " with modifiers " << modifiers << "\n";
   XGrabKey(this->display, kc, modifiers, DefaultRootWindow(display), false, GrabModeAsync, GrabModeAsync);
 }
 
@@ -66,9 +65,8 @@ Keyboard::add_hotkey(std::string keyname, bool meta, bool alt, bool ctrl, bool s
         (shift ? 1 << MOD_SHIFT : 0) |
         (super ? 1 << MOD_SUPER : 0);
 
-  std::cout << "Resolving key name " << keyname << "\n";
   xkb_keysym_t ksym = xkb_keysym_from_name(keyname.c_str(), XKB_KEYSYM_CASE_INSENSITIVE);
-  std::cout << "Adding hotkey: KeySym " << ksym << " Flags " << profile <<  " action: " << action << "\n";
+
   assert(ksym != XKB_KEY_NoSymbol);
   if ((int)this->actions.size() < keyboard_id + 1) {
     this->actions.resize(keyboard_id + 1);
@@ -83,8 +81,6 @@ Keyboard::handle_keypress(KeySym ksym, int keyboard_id)
 {
   // Handle "all keyboards"
   if (actions[0][this->mod_profile()].find(ksym) != actions[0][this->mod_profile()].end()) {
-    std::cout << "Action: " << actions[0][this->mod_profile()][ksym] << "\n";
-
     // Re-grab
     assert(ksym <= std::numeric_limits<xkb_keysym_t>::max());
     this->establish_grab((xkb_keysym_t)ksym, this->mod_state[MOD_META], this->mod_state[MOD_ALT], this->mod_state[MOD_CTRL], this->mod_state[MOD_SHIFT], this->mod_state[MOD_SUPER]);
@@ -96,8 +92,6 @@ Keyboard::handle_keypress(KeySym ksym, int keyboard_id)
   if (keyboard_id > 0) {
     // Handle this keyboard
     if (actions[keyboard_id][this->mod_profile()].find(ksym) != actions[keyboard_id][this->mod_profile()].end()) {
-      std::cout << "Action: " << actions[keyboard_id][this->mod_profile()][ksym] << "\n";
-
       // Re-grab
       assert(ksym <= std::numeric_limits<xkb_keysym_t>::max());
       this->establish_grab((xkb_keysym_t)ksym, this->mod_state[MOD_META], this->mod_state[MOD_ALT], this->mod_state[MOD_CTRL], this->mod_state[MOD_SHIFT], this->mod_state[MOD_SUPER]);
@@ -173,15 +167,11 @@ Keyboard::handle(Display* display_arg, XIRawEvent *ev, bool press) {
   }
   this->last_key = ksym;
 
-  std::cout << "Event. KeySym: " << ksym << " Pressed: " << press << " \n";
-  std::cout << "DeviceID: " << ev->deviceid << " SourceID: " << ev->sourceid << "\n";
-
   int deviceid = ev->deviceid;
   if (this->keyboard_ids.find(deviceid) == this->keyboard_ids.end()) {
     int device_count;
     XIDeviceInfo * dinfo = XIQueryDevice(display_arg, deviceid, &device_count);
 
-    std::cout << "Resolving. Device Name: " << dinfo->name << " ID: " << dinfo->deviceid << "\n";
     this->resolve_keyboard(deviceid, dinfo);
 
     for (int i = 0 ; i < device_count ; ++i) {
