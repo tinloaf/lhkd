@@ -15,6 +15,14 @@ Having active hotkeys when your screen is locked has obvious security implicatio
 
 **The takeaway**: Please don't use this software on security-sensitive workstations. You have been warned.
 
+Features
+--------
+
+LockscreenHotKeyDaemon …
+
+* runs commands at the press of a hotkey (combination) even while your screen locker is active
+* is able to distinguish between different keyboards. Personally, I have a second numblock keyboard next to my main keyboard, which I use solely for hotkeys.
+
 Building
 --------
 
@@ -28,13 +36,15 @@ You will need the headers for libX11, libXi and libxkb as well as a compiler sup
 Usage
 -----
 
-You need to start lhkd with a JSON config file. Currently, the only configuration necessary is a mapping of key combinations to commands. Look at example.json for an example. The key modifiers currently available are:
+You need to start lhkd with a JSON config file. Currently, the only required configuration is a mapping of key combinations to commands. Look at example.json for an example. The key modifiers currently available are:
 
 * meta
 * alt
 * ctrl
 * shift
 * super (The "windows" key on non-Mac systems)
+
+Optionally, you can assign keyboard numbers to your keyboards, and have certain hotkeys only listen to certain keyboards. Again, see example.json for an example.
 
 License
 -------
