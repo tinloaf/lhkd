@@ -30,7 +30,7 @@ Usage
 
 You need to start lhkd with a JSON config file. Currently, the only configuration necessary is a mapping of key combinations to commands. Look at example.json for an example. The key modifiers currently available are:
 
-* meta (Labeled "AltGr" on most non-Mac-keyboards)
+* meta
 * alt
 * ctrl
 * shift
