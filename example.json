@@ -22,27 +22,14 @@
     "ctrl": false,
     "shift": false,
     "super": true,
-    "action": "/usr/bin/xmessage \"Ja\"",
+    "action": "/usr/bin/xmessage \"You just pressed windows-m on your Thinkpad Keyboard\"",
     "keyboard": 1
-    },
-    {"key": "m",
-    "meta": false,
-    "alt": false,
-    "ctrl": false,
-    "shift": false,
-    "super": true,
-    "action": "/usr/bin/xmessage \"Nein\"",
-    "keyboard": 2
     }
   ],
   "keyboards": [
     {
       "regex": ".*AT Translated.*",
       "id": 1
-    },
-    {
-      "regex": ".*nonexistant.*",
-      "id": 2
     }
   ]
 }
