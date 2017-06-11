@@ -15,6 +15,34 @@
     "shift": false,
     "super": true,
     "action": "/usr/bin/xmessage \"Hello World\""
+    },
+    {"key": "m",
+    "meta": false,
+    "alt": false,
+    "ctrl": false,
+    "shift": false,
+    "super": true,
+    "action": "/usr/bin/xmessage \"Ja\"",
+    "keyboard": 1
+    },
+    {"key": "m",
+    "meta": false,
+    "alt": false,
+    "ctrl": false,
+    "shift": false,
+    "super": true,
+    "action": "/usr/bin/xmessage \"Nein\"",
+    "keyboard": 2
+    }
+  ],
+  "keyboards": [
+    {
+      "regex": ".*AT Translated.*",
+      "id": 1
+    },
+    {
+      "regex": ".*nonexistant.*",
+      "id": 2
     }
   ]
 }

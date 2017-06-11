@@ -11,6 +11,7 @@ int main(int argc, char **argv) {
   Keyboard kbd;
 
   cfg.process_keys(kbd);
-
+  cfg.process_keyboards(kbd);
+  
   kbd.listen();
 }

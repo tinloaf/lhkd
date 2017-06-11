@@ -24,7 +24,8 @@ public:
   Config(std::string filename);
 
   void process_keys(Keyboard &kbd);
-
+  void process_keyboards(Keyboard &kbd);
+  
 private:
   json data;
 };

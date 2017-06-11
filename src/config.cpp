@@ -21,6 +21,22 @@ void
 Config::process_keys(Keyboard &kbd)
 {
   for (auto entry : this->data["keys"]) {
-    kbd.add_hotkey(entry["key"], entry["meta"], entry["alt"], entry["ctrl"], entry["shift"], entry["super"], entry["action"]);
+    int keyboard_id = 0; // ALL_KEYBOARDS
+    if (entry.find("keyboard") != entry.end()) {
+      keyboard_id = entry["keyboard"];
+    }
+    kbd.add_hotkey(entry["key"], entry["meta"], entry["alt"], entry["ctrl"], entry["shift"], entry["super"], entry["action"], keyboard_id);
+  }
+}
+
+void
+Config::process_keyboards(Keyboard &kbd)
+{
+  if (this->data.find("keyboards") == this->data.end()) {
+    return;
+  }
+  
+  for (auto entry : this->data["keyboards"]) {
+    kbd.add_keyboard_selector(entry["id"], entry["regex"]);
   }
 }
