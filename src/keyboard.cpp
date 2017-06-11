@@ -6,6 +6,7 @@
 #include <cassert>
 #include <xcb/xproto.h>
 #include <X11/extensions/XInput2.h>
+#include <X11/XKBlib.h>
 
 Keyboard::Keyboard()
 {
@@ -110,7 +111,7 @@ Keyboard::handle_keypress(KeySym ksym, int keyboard_id)
 uint16_t
 Keyboard::get_xlib_modifiers(bool meta, bool alt, bool ctrl, bool shift, bool super)
 {
-  uint16_t modifiers;
+  uint16_t modifiers = 0;
   if (alt) {
     modifiers |= Mod1Mask;
   }
@@ -162,7 +163,8 @@ Keyboard::resolve_keyboard(int device_id, XIDeviceInfo * dinfo)
 
 void
 Keyboard::handle(Display* display_arg, XIRawEvent *ev, bool press) {
-  KeySym ksym = XKeycodeToKeysym(display_arg, ev->detail, 0);
+  KeySym ksym = XkbKeycodeToKeysym(display_arg, (KeyCode)ev->detail,
+                                0, this->mod_state[MOD_SHIFT] ? 1 : 0);
 
   // For some reason we get every event twice. Deduplication happens here.
   if (this->last_key == ksym) {
@@ -254,7 +256,6 @@ Keyboard::listen()
         ev.xcookie.extension == this->opcode &&
         XGetEventData(display, &ev.xcookie))
     {
-      const char* s = NULL;
         switch(ev.xcookie.evtype)
         {
             case XI_RawKeyPress: handle(display, (XIRawEvent *)ev.xcookie.data, true); break;
