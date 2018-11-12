@@ -16,18 +16,17 @@
 // Re-enable warnings
 #pragma GCC diagnostic pop
 
-
 using json = nlohmann::json;
 
 class Config {
 public:
-  Config(std::string filename);
+	Config(std::string filename);
 
-  void process_keys(Keyboard &kbd);
-  void process_keyboards(Keyboard &kbd);
-  
+	void process_keys(Keyboard & kbd);
+	void process_keyboards(Keyboard & kbd);
+
 private:
-  json data;
+	json data;
 };
 
 #endif
